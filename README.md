@@ -29,83 +29,41 @@ npm install --save react-native-octodb
 
 Then follow the instructions for your platform to link `react-native-octodb` into your project
 
-## Promises
-
-To enable promises, run:
-
-```javascript
-SQLite.enablePromise(true);
-```
-
 ## iOS
 
 ### React Native 0.60 and above
 
-Run `cd ios && pod install && cd ..`
+Run:
 
-(linking is not required in React Native 0.60 and above)
+```
+cd ios && pod install && cd ..
+```
 
 ### React Native 0.59 and below
 
-#### Step 1. Install Dependencies
+Check the [instructions](instructions/INSTALL.md)
 
-##### With CocoaPods:
 
-Add this to your Podfile which should be located inside the ios project subdirectory
-```ruby
-pod 'React', :path => '../node_modules/react-native'
-pod 'react-native-octodb', :path => '../node_modules/react-native-octodb'
+## Android
+
+### React Native 0.60 and above
+
+There are no extra steps
+
+### React Native 0.59 and below
+
+Check the [instructions](instructions/INSTALL.md)
+
+
+## How to Use
+
+Add this line to "require" the module on your `App.js`:
+
 ```
-Or use the sample Podfile included in the package by copying it over to ios subdirectory and replacing AwesomeProject inside of it with the name of your RN project.
-
-Refresh the Pods installation
-```ruby
-pod install
-```
-OR
-```ruby
-pod update
-```
-
-Done, skip to Step 2.
-
-##### Without CocoaPods:
-
-This command should be executed in the root directory of your RN project
-```shell
-react-native link
+var SQLite = require('react-native-octodb')
 ```
 
-rnpm and xcode are dependencies of this project and should get installed with the module but in case there are issue running rnpm link and rnpm/xcode are not already installed you can try to install it globally as follows:
-```shell
-npm -g install rnpm xcode
-```
-After linking project should like this:
-
-![alt tag](instructions/after-rnpm.png)
-
-#### Step 1a. If rnpm link does not work for you you can try manually linking according to the instructions below:
-
-
-##### Drag the SQLite Xcode project as a dependency project into your React Native XCode project
-
-![alt tag](https://raw.github.com/andpor/react-native-sqlite-storage/master/instructions/libs.png)
-
-##### XCode SQLite libraries dependency set up
-
-Add libSQLite.a (from Workspace location) to the required Libraries and Frameworks. Also add sqlite3.0.tbd (XCode 7) or libsqlite3.0.dylib (XCode 6 and earlier) in the same fashion using Required Libraries view (Do not just add them manually as the build paths will not be properly set)
-
-![alt tag](https://raw.github.com/andpor/react-native-sqlite-storage/master/instructions/addlibs.png)
-
-#### Step 2. Application JavaScript require
-
-Add `var SQLite = require('react-native-octodb')` to your index.ios.js
-
-![alt tag](instructions/require.png)
-
-#### Step 3. Write application JavaScript code using the SQLite plugin
-
-Add JS application code to use SQLite API in your index.ios.js etc. Here is some sample code. For full working example see test/index.ios.callback.js. Please note that Promise based API is now supported as well with full examples in the working React Native app under test/index.ios.promise.js
+Then add code to use the SQLite API in your `App.js` file. Here is some sample code:
 
 ```javascript
 errorCB(err) {
@@ -123,137 +81,34 @@ openCB() {
 var db = SQLite.openDatabase("test.db", "1.0", "Test Database", 200000, openCB, errorCB);
 db.transaction((tx) => {
   tx.executeSql('SELECT * FROM Employees a, Departments b WHERE a.department = b.department_id', [], (tx, results) => {
-      console.log("Query completed");
+    console.log("Query completed");
 
-      // Get rows with Web SQL Database spec compliance.
+    // Get rows with Web SQL Database spec compliance
+    var len = results.rows.length;
+    for (let i = 0; i < len; i++) {
+      let row = results.rows.item(i);
+      console.log(`Employee name: ${row.name}, Dept Name: ${row.deptName}`);
+    }
 
-      var len = results.rows.length;
-      for (let i = 0; i < len; i++) {
-        let row = results.rows.item(i);
-        console.log(`Employee name: ${row.name}, Dept Name: ${row.deptName}`);
-      }
-
-      // Alternatively, you can use the non-standard raw method.
-
-      /*
-        let rows = results.rows.raw(); // shallow copy of rows Array
-
-        rows.map(row => console.log(`Employee name: ${row.name}, Dept Name: ${row.deptName}`));
-      */
-    });
+    // Alternatively, you can use the non-standard raw method
+    /*
+    let rows = results.rows.raw(); // shallow copy of rows Array
+    rows.map(row => console.log(`Employee name: ${row.name}, Dept Name: ${row.deptName}`));
+    */
+  });
 });
 ```
 
-# How to use (Android)
+For full working example see [test/index.ios.callback.js](test/index.ios.callback.js). Please
+note that Promise based API is now supported as well with full examples in the working
+React Native app under [test/index.ios.promise.js](test/index.ios.promise.js)
 
-### React Native 0.60 and above
-
-There are no extra steps
-
-### React Native 0.59 and below
-
-#### Step 1 - Update Gradle Settings
-
-Located under Gradle Settings in Project Panel
-
-```gradle
-// file: android/settings.gradle
-...
-
-include ':react-native-octodb'
-project(':react-native-octodb').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-octodb/platforms/android') // react-native-octodb >= 4.0.0
-// IMPORTANT: if you are working with a version less than 4.0.0 the project directory is '../node_modules/react-native-octodb/src/android'
-```
-
-#### Step 2 - Update app module Gradle Build script
-
-Located under Gradle Settings in Project Panel
-
-```gradle
-// file: android/app/build.gradle
-...
-
-dependencies {
-    ...
-    implementation project(':react-native-octodb')
-}
-```
-
-#### Step 3 - Register React Package
-
-This should work on React version but if it does not, try the ReactActivity based approach
-
-> Note: for version 3.0.0 and below you would have to pass in the instance of your Activity to the SQLitePluginPackage constructor
-
-```java
-...
-import org.pgsqlite.SQLitePluginPackage;
-
-public class MainActivity extends Activity implements DefaultHardwareBackBtnHandler {
-
-    private ReactInstanceManager mReactInstanceManager;
-    private ReactRootView mReactRootView;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mReactRootView = new ReactRootView(this);
-        mReactInstanceManager = ReactInstanceManager.builder()
-                .setApplication(getApplication())
-                .setBundleAssetName("index.android.bundle")  // this is dependant on how you name you JS files, example assumes index.android.js
-                .setJSMainModuleName("index.android")        // this is dependant on how you name you JS files, example assumes index.android.js
-                .addPackage(new MainReactPackage())
-                .addPackage(new SQLitePluginPackage())       // register SQLite Plugin here
-                .setUseDeveloperSupport(BuildConfig.DEBUG)
-                .setInitialLifecycleState(LifecycleState.RESUMED)
-                .build();
-        mReactRootView.startReactApplication(mReactInstanceManager, "AwesomeProject", null); //change "AwesomeProject" to name of your app
-        setContentView(mReactRootView);
-    }
-...
-
-```
-
-Alternative approach on newer versions of React Native (0.18+)
-
-> **Note:** for version 3.0.0 and below you would have to pass in the instance of your Activity to the SQLitePluginPackage constructor
-
-```java
-import org.pgsqlite.SQLitePluginPackage;
-
-public class MainApplication extends Application implements ReactApplication {
-  ......
-
-  /**
-   * A list of packages used by the app. If the app uses additional views
-   * or modules besides the default ones, add more packages here.
-   */
-    @Override
-    protected List<ReactPackage> getPackages() {
-      return Arrays.<ReactPackage>asList(
-        new SQLitePluginPackage(),   // register SQLite Plugin here
-        new MainReactPackage());
-    }
-}
-```
-
-#### Step 4 - Require and use in Javascript
-
-See full examples (callbacks and Promise) in the `test` directory
-
-```js
-// file: index.android.js
-
-var React = require('react-native');
-var SQLite = require('react-native-octodb')
-...
-```
 
 ## Opening a database
 
 Opening a database is slightly different between iOS and Android. Where as on Android the location of the database file is fixed, there are three choices of where the database file can be located on iOS. The 'location' parameter you provide to `openDatabase` call indicated where you would like the file to be created. This parameter is neglected on Android.
 
-WARNING: the default location on iOS has changed in version 3.0.0 - it is now a no-sync location as mandated by Apple so the release is backward incompatible.
+The default location on iOS is a no-sync location as mandated by Apple
 
 
 To open a database in default no-sync location (affects iOS *only*)::
@@ -310,7 +165,7 @@ When calling `SQLite.openDatabase` in your React Native code, you need to set th
 SQLite.openDatabase({name: 'my.db', location: 'Shared'}, successcb, errorcb);
 ```
 
-## Importing a pre-populated database.
+## Importing a pre-populated database
 
 This is **NOT** supported if the database uses OctoDB, because the database will be downloaded from the primary node(s) at the first run.
 
@@ -355,14 +210,19 @@ To detach a database, just use the detach()-method:
 dbMaster.detach( 'second', successCallback, errorCallback );
 ```
 
-For sure, their is also Promise-support available for attach() and detach(), as shown in the example-application under the
+For sure, there is also Promise-support available for attach() and detach(), as shown in the example-application under the
 directory "examples".
 
-# Original Cordova SQLite Bindings from Chris Brody and Davide Bertola
-https://github.com/litehelpers/Cordova-sqlite-storage
 
-The issues and limitations for the actual SQLite can be found on this site.
+### Promises
 
-## Issues
+To enable promises, run:
 
-1. Android binds all numeric SQL input values to double. This is due to the underlying React Native limitation where only a Numeric type is available on the interface point making it ambiguous to distinguish integers from doubles. Once I figure out the proper way to do this I will update the codebase [(Issue #4141)] (https://github.com/facebook/react-native/issues/4141).
+```javascript
+SQLite.enablePromise(true);
+```
+
+
+## Known Issues
+
+1. Android binds all numeric SQL input values to double. This is due to the underlying React Native limitation where only a Numeric type is available on the interface point making it ambiguous to distinguish integers from doubles. Once I figure out the proper way to do this I will update the codebase [(Issue #4141)] (https://github.com/facebook/react-native/issues/4141)
