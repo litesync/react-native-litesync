@@ -9,9 +9,9 @@ package org.pgsqlite;
 
 import android.annotation.SuppressLint;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
-import android.database.sqlite.SQLiteStatement;
+import org.sqlite.database.sqlite.SQLiteDatabase;
+import org.sqlite.database.sqlite.SQLiteException;
+import org.sqlite.database.sqlite.SQLiteStatement;
 import android.content.Context;
 import android.util.Base64;
 
@@ -76,6 +76,7 @@ public class SQLitePlugin extends ReactContextBaseJavaModule {
         super(reactContext);
         this.context = reactContext.getApplicationContext();
         this.threadPool = Executors.newCachedThreadPool();
+        System.loadLibrary("octodb");
     }
 
     /**
@@ -338,6 +339,7 @@ public class SQLitePlugin extends ReactContextBaseJavaModule {
     private SQLiteDatabase openDatabase(String dbname, String assetFilePath, int openFlags, CallbackContext cbc) throws Exception {
         InputStream in = null;
         File dbfile = null;
+        String uri_params = null;
         try {
             SQLiteDatabase database = this.getDatabase(dbname);
             if (database != null && database.isOpen()) {
@@ -387,7 +389,14 @@ public class SQLitePlugin extends ReactContextBaseJavaModule {
 
             if (dbfile == null) {
                 openFlags = SQLiteDatabase.OPEN_READWRITE | SQLiteDatabase.CREATE_IF_NECESSARY;
-                dbfile = this.getContext().getDatabasePath(dbname);
+
+                if (dbname.startsWith("file:")) {
+                    String filename = dbname.substring(5, dbname.lastIndexOf('?'));
+                    dbfile = this.getContext().getDatabasePath(filename);
+                    uri_params = dbname.substring(dbname.lastIndexOf('?'));
+                } else {
+                    dbfile = this.getContext().getDatabasePath(dbname);
+                }
 
                 if (!dbfile.exists() && assetImportRequested) {
                     if (assetImportError || in == null) {
@@ -409,9 +418,16 @@ public class SQLitePlugin extends ReactContextBaseJavaModule {
                 }
             }
 
-            FLog.v(TAG, "DB file is ready, proceeding to OPEN SQLite DB: " + dbfile.getAbsolutePath());
+            String fullpath;
+            if (uri_params != null) {
+                fullpath = "file:" + dbfile.getAbsolutePath() + uri_params;
+            } else {
+                fullpath = dbfile.getAbsolutePath();
+            }
 
-            SQLiteDatabase mydb = SQLiteDatabase.openDatabase(dbfile.getAbsolutePath(), null, openFlags);
+            FLog.v(TAG, "DB file is ready, proceeding to OPEN SQLite DB: " + fullpath);
+
+            SQLiteDatabase mydb = SQLiteDatabase.openDatabase(fullpath, null, openFlags);
 
             if (cbc != null)
                 cbc.success("Database opened");
@@ -557,7 +573,7 @@ public class SQLitePlugin extends ReactContextBaseJavaModule {
     @SuppressLint("NewApi")
     private boolean deleteDatabaseNow(String dbname) {
         File dbfile = this.getContext().getDatabasePath(dbname);
-        return android.database.sqlite.SQLiteDatabase.deleteDatabase(dbfile);
+        return SQLiteDatabase.deleteDatabase(dbfile);
     }
 
     /**
