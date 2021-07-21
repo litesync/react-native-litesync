@@ -21,7 +21,7 @@ import {
 } from 'react-native';
 
 
-import SQLite from 'react-native-sqlite-storage';
+import SQLite from 'react-native-octodb';
 SQLite.DEBUG(true);
 SQLite.enablePromise(false);
 
