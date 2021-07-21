@@ -56,7 +56,7 @@ npm -g install rnpm xcode
 ```
 After linking project should like this:
 
-![alt tag](instructions/after-rnpm.png)
+![alt tag](https://raw.github.com/andpor/react-native-sqlite-storage/master/instructions/after-rnpm.png)
 
 #### Step 1a. If rnpm link does not work for you you can try manually linking according to the instructions below:
 
@@ -74,14 +74,14 @@ Add libSQLite.a (from Workspace location) to the required Libraries and Framewor
 
 #### Step 2. Application JavaScript require
 
-Add `var SQLite = require('react-native-octodb')` to your index.ios.js
-
-![alt tag](instructions/require.png)
+Add `var SQLite = require('react-native-octodb')` to your `App.js`
 
 
 #### Step 3. Write application JavaScript code using the SQLite plugin
 
-Add JS application code to use the SQLite API in your `index.ios.js` file. Here is some sample code:
+Add JS application code to use the SQLite plugin in your `App.js`
+
+Here is a sample code:
 
 ```javascript
 errorCB(err) {
@@ -110,8 +110,8 @@ db.transaction((tx) => {
 
     // Alternatively, you can use the non-standard raw method
     /*
-      let rows = results.rows.raw(); // shallow copy of rows Array
-      rows.map(row => console.log(`Employee name: ${row.name}, Dept Name: ${row.deptName}`));
+    let rows = results.rows.raw(); // shallow copy of rows Array
+    rows.map(row => console.log(`Employee name: ${row.name}, Dept Name: ${row.deptName}`));
     */
   });
 });
