@@ -110,8 +110,7 @@ Opening a database is slightly different between iOS and Android. Where as on An
 
 The default location on iOS is a no-sync location as mandated by Apple
 
-
-To open a database in default no-sync location (affects iOS *only*)::
+To open a database in default no-sync location (affects iOS *only*):
 
 ```js
 SQLite.openDatabase({name: 'my.db', location: 'default'}, successcb, errorcb);
@@ -171,14 +170,14 @@ This is **NOT** supported if the database uses OctoDB, because the database will
 
 But as this library also supports normal SQLite databases, you can import an existing pre-populated database file into your application. 
 
-On this case follow the instructions at the original repo.
+On this case follow the instructions at the [original repo](https://github.com/andpor/react-native-sqlite-storage)
 
 
 ## Attaching another database
 
-Sqlite3 offers the capability to attach another database to an existing database-instance, i.e. for making cross database JOINs available.
+Sqlite3 offers the capability to attach another database to an existing database instance, i.e. for making cross database JOINs available.
 This feature allows to SELECT and JOIN tables over multiple databases with only one statement and only one database connection.
-To archieve this, you need to open both databases and to call the attach()-method of the destination (or master) -database to the other ones.
+To archieve this, you need to open both databases and to call the attach() method of the destination (or master) database to the other ones.
 
 ```js
 let dbMaster, dbSecond;
@@ -198,7 +197,7 @@ dbSecond = SQLite.openDatabase({name: 'second'},
 
 The first argument of `attach()` is the name of the database, which is used in `SQLite.openDatabase()`. The second argument is the alias, that is used to query on tables of the attached database.
 
-The following statement would select data from the master database and include the "second"-database within a simple SELECT/JOIN-statement:
+The following statement would select data from the master database and include the "second" database within a simple SELECT/JOIN statement:
 
 ```sql
 SELECT * FROM user INNER JOIN second.subscriptions s ON s.user_id = user.id
@@ -210,7 +209,7 @@ To detach a database, just use the detach()-method:
 dbMaster.detach( 'second', successCallback, errorCallback );
 ```
 
-For sure, there is also Promise-support available for attach() and detach(), as shown in the example-application under the
+There is also Promise support available for attach() and detach(), as shown in the example application under the
 directory "examples".
 
 
@@ -225,4 +224,10 @@ SQLite.enablePromise(true);
 
 ## Known Issues
 
-1. Android binds all numeric SQL input values to double. This is due to the underlying React Native limitation where only a Numeric type is available on the interface point making it ambiguous to distinguish integers from doubles. Once I figure out the proper way to do this I will update the codebase [(Issue #4141)] (https://github.com/facebook/react-native/issues/4141)
+1. React Native does not distinguish between integers and doubles. Only a Numeric type is available on the interface point. You can check [the original issue](https://github.com/facebook/react-native/issues/4141)
+
+The current solution is to cast the bound value in the SQL statement as shown here:
+
+```sql
+INSERT INTO products (name,qty,price) VALUES (?, cast(? as integer), cast(? as real))
+```
