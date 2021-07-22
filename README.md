@@ -54,41 +54,60 @@ For React Native 0.59 and below, please follow these [instructions](instructions
 
 ## How to Use
 
-Add this line to require the module on your `App.js`:
+Add this line to access the module on your `App.js`:
 
 ```javascript
 var SQLite = require('react-native-octodb')
 ```
 
-Then add code to use the SQLite API in your `App.js` file
-
-Here is a sample code:
+Then add code to use the SQLite API. Here is a sample code:
 
 ```javascript
-function errorCB(err) {
+function on_error(err) {
   console.log("SQL Error:", err);
 }
 
-successCB = function(){
+on_success = function(){
   console.log("SQL executed");
 }
 
-openCB = () => {
-  console.log("Database OPENED");
+on_db_open = () => {
+  console.log("The database was opened");
 }
 
+// open the database
 var uri = "file:test.db?node=secondary&connect=tcp://server:port";
-var db = SQLite.openDatabase(uri, "1.0", "Test Database", 200000, openCB, errorCB);
+var db = SQLite.openDatabase(uri, "1.0", "Test Database", 200000, on_db_open, on_error);
 
-db.transaction((tx) => {
+// check if the db is ready
+if (db.is_ready()) {
+  // show the main screen
+  ...
+} else {
+  // show the signup/login screen
+  ...
+  db.on('ready', () => {
+    // login successful, show the main screen
+    ...
+  });
+}
 
-  tx.executeSql("CREATE TABLE IF NOT EXISTS tasks (id INTEGER PRIMARY KEY, name, done, row_owner)", [], this.successCB, this.errorCB);
-  tx.executeSql("INSERT INTO tasks (name,done) VALUES ('Learn React Native',1)", []);
-  tx.executeSql("INSERT INTO tasks (name,done) VALUES ('Use SQLite',1)", []);
-  tx.executeSql("INSERT INTO tasks (name,done) VALUES ('Test OctoDB',0)", []);
+db.on('sync', () => {
+  show_items();
+});
 
-}, () => {  // success callback = transaction committed
+insert_items = () => {
+  db.transaction((tx) => {
+    //tx.executeSql("CREATE TABLE IF NOT EXISTS tasks (id INTEGER PRIMARY KEY, name, done, row_owner)", [], this.on_success, this.on_error);
+    tx.executeSql("INSERT INTO tasks (name,done) VALUES ('Learn React Native',1)", []);
+    tx.executeSql("INSERT INTO tasks (name,done) VALUES ('Use SQLite',1)", []);
+    tx.executeSql("INSERT INTO tasks (name,done) VALUES ('Test OctoDB',0)", []);
+  }, () => {  // success callback = transaction committed
+    show_items();
+  }, on_error);
+}
 
+show_items = () => {
   db.executeSql('SELECT * FROM tasks', [], (result) => {
     // Get rows with Web SQL Database spec compliance
     var len = result.rows.length;
@@ -102,8 +121,7 @@ db.transaction((tx) => {
     tasks.forEach(row => console.log(`Task: ${task.name}, done: ${task.done}`));
     */
   });
-
-}, errorCB);
+}
 ```
 
 ### Working examples
