@@ -1,5 +1,5 @@
 /*
- * sqlite.ios.promise.js
+ * index.promise.js
  *
  * Created by Andrzej Porebski on 10/29/15.
  * Copyright (c) 2015 Andrzej Porebski.
@@ -20,11 +20,10 @@ import {
   ListView
 } from 'react-native';
 
-
 import SQLite from 'react-native-octodb';
+
 SQLite.DEBUG(true);
 SQLite.enablePromise(true);
-
 
 const database_name = "Test.db";
 const database_version = "1.0";
