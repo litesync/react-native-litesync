@@ -64,7 +64,7 @@ Then add code to use the SQLite API. Here is a sample code:
 
 ```javascript
 function on_error(err) {
-  console.log("SQL Error:", err);
+  console.log("Error:", err);
 }
 
 on_success = function(){
@@ -77,20 +77,19 @@ on_db_open = () => {
 
 // open the database
 var uri = "file:test.db?node=secondary&connect=tcp://server:port";
-var db = SQLite.openDatabase(uri, "1.0", "Test Database", 200000, on_db_open, on_error);
+var db = SQLite.openDatabase({name: uri}, on_db_open, on_error);
 
-// check if the db is ready
-if (db.is_ready()) {
-  // show the main screen
-  ...
-} else {
+db.on('error', on_error);  // this should be the first
+
+db.on('not_ready', () => {
   // show the signup/login screen
   ...
-  db.on('ready', () => {
-    // login successful, show the main screen
-    ...
-  });
-}
+});
+
+db.on('ready', () => {
+  // login successful, show the main screen
+  ...
+});
 
 db.on('sync', () => {
   show_items();
@@ -141,13 +140,13 @@ The default location on iOS is a no-sync location as mandated by Apple
 To open a database in default no-sync location (affects iOS *only*):
 
 ```js
-SQLite.openDatabase({name: 'my.db', location: 'default'}, successcb, errorcb);
+SQLite.openDatabase({name: uri, location: 'default'}, successcb, errorcb);
 ```
 
 To specify a different location (affects iOS *only*):
 
 ```js
-SQLite.openDatabase({name: 'my.db', location: 'Library'}, successcb, errorcb);
+SQLite.openDatabase({name: uri, location: 'Library'}, successcb, errorcb);
 ```
 
 where the `location` option may be set to one of the following choices:
@@ -160,7 +159,7 @@ where the `location` option may be set to one of the following choices:
 The original webSql style `openDatabase` still works and the location will implicitly default to 'default' option:
 
 ```js
-SQLite.openDatabase("myDatabase.db", "1.0", "Demo", -1);
+SQLite.openDatabase(uri, "1.0", "Demo", -1);
 ```
 
 ## Opening a database in an App Group's Shared Container (iOS)
@@ -189,7 +188,7 @@ In both `ios/MY_APP_NAME/Info.plist` and `ios/MY_APP_EXT_NAME/Info.plist` (along
 When calling `SQLite.openDatabase` in your React Native code, you need to set the `location` param to `'Shared'`:
 
 ```js
-SQLite.openDatabase({name: 'my.db', location: 'Shared'}, successcb, errorcb);
+SQLite.openDatabase({name: uri, location: 'Shared'}, successcb, errorcb);
 ```
 
 ## Importing a pre-populated database
