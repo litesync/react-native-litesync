@@ -21,8 +21,7 @@
     "sqlite",
     "sqlite3",
     "ios",
-    "android",
-    "cordova-sqlite-storage"
+    "android"
   ],
   "author": "Andrzej Porebski",
   "license": "MIT",
@@ -31,6 +30,7 @@
   },
   "homepage": "https://github.com/octodb/react-native-octodb",
   "peerDependencies": {
-    "react-native": ">=0.14.0"
+    "react-native": ">=0.14.0",
+    "react-native-udp": "^4.1.2"
   }
 }
