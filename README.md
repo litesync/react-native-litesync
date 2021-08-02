@@ -24,11 +24,11 @@ Features:
 # Installation
 
 ```
-// using npm
-npm install --save react-native-octodb
+# using yarn
+yarn add react-native-octodb react-native-udp
 
-// using yarn
-yarn add react-native-octodb
+# using npm
+npm install react-native-octodb react-native-udp
 ```
 
 Then follow the instructions for your platform to link `react-native-octodb` to your project
@@ -50,6 +50,22 @@ For React Native 0.59 and below, please follow these [instructions](instructions
 There are no extra steps for React Native 0.60 and above
 
 For React Native 0.59 and below, please follow these [instructions](instructions/INSTALL.md)
+
+
+## Native libraries
+
+To install the free version of OctoDB native libraries, execute the following:
+
+```
+wget http://octodb.io/download/octodb.aar
+wget http://octodb.io/download/octodb-free-ios-native-libs.tar.gz
+tar zxvf octodb-free-ios-native-libs.tar.gz lib
+mv lib node_modules/react-native-octodb/platforms/ios/
+mv octodb.aar node_modules/react-native-octodb/platforms/android/
+```
+
+When moving to the full version just copy the libraries to the respective folders as done above,
+replacing the existing files.
 
 
 ## How to Use
