@@ -10,6 +10,10 @@
 		C7DCD6E41BE0295900F3300E /* SQLite.h in Headers */ = {isa = PBXBuildFile; fileRef = C7DCD6E21BE0295900F3300E /* SQLite.h */; };
 		C7DCD6E51BE0295A00F3300E /* SQLite.m in Sources */ = {isa = PBXBuildFile; fileRef = C7DCD6E31BE0295900F3300E /* SQLite.m */; };
 		C7DCD7141BE2D5DE00F3300E /* SQLiteResult.m in Sources */ = {isa = PBXBuildFile; fileRef = C7DCD7131BE2D5DE00F3300E /* SQLiteResult.m */; };
+		D181DCE426BB251700703701 /* libuv.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D181DCE026BB251700703701 /* libuv.a */; };
+		D181DCE526BB251700703701 /* libbinn.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D181DCE126BB251700703701 /* libbinn.a */; };
+		D181DCE626BB251700703701 /* libsecp256k1-vrf.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D181DCE226BB251700703701 /* libsecp256k1-vrf.a */; };
+		D181DCE726BB251700703701 /* liboctodb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D181DCE326BB251700703701 /* liboctodb.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -29,6 +33,10 @@
 		C7DCD6E31BE0295900F3300E /* SQLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQLite.m; sourceTree = "<group>"; };
 		C7DCD7131BE2D5DE00F3300E /* SQLiteResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQLiteResult.m; sourceTree = "<group>"; };
 		C7DCD7151BE2D61E00F3300E /* SQLiteResult.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SQLiteResult.h; sourceTree = "<group>"; };
+		D181DCE026BB251700703701 /* libuv.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libuv.a; path = lib/libuv.a; sourceTree = "<group>"; };
+		D181DCE126BB251700703701 /* libbinn.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbinn.a; path = lib/libbinn.a; sourceTree = "<group>"; };
+		D181DCE226BB251700703701 /* libsecp256k1-vrf.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libsecp256k1-vrf.a"; path = "lib/libsecp256k1-vrf.a"; sourceTree = "<group>"; };
+		D181DCE326BB251700703701 /* liboctodb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liboctodb.a; path = lib/liboctodb.a; sourceTree = "<group>"; };
 		E23D7B471ACEFE2A00C59171 /* libSQLite.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSQLite.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -37,6 +45,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D181DCE726BB251700703701 /* liboctodb.a in Frameworks */,
+				D181DCE526BB251700703701 /* libbinn.a in Frameworks */,
+				D181DCE426BB251700703701 /* libuv.a in Frameworks */,
+				D181DCE626BB251700703701 /* libsecp256k1-vrf.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -57,6 +69,10 @@
 		E23D7B3E1ACEFE2A00C59171 = {
 			isa = PBXGroup;
 			children = (
+				D181DCE126BB251700703701 /* libbinn.a */,
+				D181DCE326BB251700703701 /* liboctodb.a */,
+				D181DCE226BB251700703701 /* libsecp256k1-vrf.a */,
+				D181DCE026BB251700703701 /* libuv.a */,
 				C7DCD6E11BE0293D00F3300E /* SQLite */,
 				E23D7B481ACEFE2A00C59171 /* Products */,
 			);
@@ -251,6 +267,10 @@
 					"$(SRCROOT)/../../../react-native/React/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/lib",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = SQLite;
 				SKIP_INSTALL = YES;
@@ -268,6 +288,10 @@
 					"$(SRCROOT)/../../../react-native/React/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/lib",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = SQLite;
 				SKIP_INSTALL = YES;

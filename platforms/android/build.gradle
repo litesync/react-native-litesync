@@ -40,5 +40,5 @@ repositories {
 
 dependencies {
     implementation 'com.facebook.react:react-native:+'
-    implementation files('octodb/octodb.aar')
+    implementation files('octodb.aar')
 }
