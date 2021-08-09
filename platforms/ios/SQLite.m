@@ -204,13 +204,31 @@ RCT_EXPORT_METHOD(open: (NSDictionary *) options success:(RCTResponseSenderBlock
           NSString *dblocation = options[@"dblocation"];
           if (dblocation == NULL) dblocation = @"nosync";
           RCTLog(@"target database location: %@", dblocation);
-        
-          dbname = [self getDBPath:dbfilename at:dblocation];
-        
+
+          dbname = dbfilename;
+
+          NSString *suffix;
+          if ([dbname hasPrefix:@"file:"]) {
+            int len = [dbname length];
+            NSRange remaining = [dbname rangeOfString:@"?"];
+            suffix = [dbname substringWithRange:NSMakeRange(remaining.location, len - remaining.location)];
+            dbfilename = [dbname substringWithRange:NSMakeRange(5, remaining.location - 5)];
+          }
+
+          NSString *dbpath = [self getDBPath:dbfilename at:dblocation];
+
+          if (suffix) {
+            dbname = [NSString stringWithFormat: @"file:%@%@", dbpath, suffix];
+          } else {
+            dbname = dbpath;
+          }
+
+          RCTLog(@"Full db path: %@", dbname);
+
           /* Option to create from resource (pre-populated) if db does not exist: */
-          if (![[NSFileManager defaultManager] fileExistsAtPath:dbname] && assetFilePath != NULL) {
+          if (![[NSFileManager defaultManager] fileExistsAtPath:dbpath] && assetFilePath != NULL) {
             RCTLog(@"Copying pre-populated asset to the destination directory");
-            [self createFromResource:assetFilePath withDbname:dbname];
+            [self createFromResource:assetFilePath withDbname:dbpath];
           }
         }
       
@@ -224,34 +242,13 @@ RCT_EXPORT_METHOD(open: (NSDictionary *) options success:(RCTResponseSenderBlock
           return;
         } else {
           sqlite3_create_function(db, "regexp", 2, SQLITE_ANY, NULL, &sqlite_regexp, NULL, NULL);
-          const char *key = NULL;
           
-#ifdef SQLCIPHER
-          NSString *dbkey = options[@"key"];
-          if (dbkey != NULL) {
-            key = [dbkey UTF8String];
-            if (key != NULL) {
-              sqlite3_key(db, key, strlen(key));
-            }
-          }
-#endif
-
-          sqlite3_exec(db, "PRAGMA journal_mode=WAL;", NULL, NULL, NULL);
-
-          // Attempt to read the SQLite master table [to support SQLCipher version]:
-          if(sqlite3_exec(db, (const char*)"SELECT count(*) FROM sqlite_master;", NULL, NULL, NULL) == SQLITE_OK) {
             NSValue *dbPointer = [NSValue valueWithPointer:db];
             openDBs[dbfilename] = @{ @"dbPointer": dbPointer, @"dbPath" : dbname};
-            NSString *msg = (key != NULL) ? @"Secure database opened" : @"Database opened";
+            NSString *msg = @"Database opened";
             pluginResult = [SQLiteResult resultWithStatus:SQLiteStatus_OK messageAsString: msg];
             RCTLog(@"%@", msg);
-          } else {
-            NSString *msg = [NSString stringWithFormat:@"Unable to open %@", (key != NULL) ? @"secure database with key" : @"database"];
-            pluginResult = [SQLiteResult resultWithStatus:SQLiteStatus_ERROR messageAsString:msg];
-            RCTLog(@"%@", msg);
-            sqlite3_close (db);
-            [openDBs removeObjectForKey:dbfilename];
-          }
+
         }
       }
     }
