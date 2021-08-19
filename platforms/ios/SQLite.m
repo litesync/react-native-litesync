@@ -212,10 +212,10 @@ RCT_EXPORT_METHOD(open: (NSDictionary *) options success:(RCTResponseSenderBlock
             int len = [dbname length];
             NSRange remaining = [dbname rangeOfString:@"?"];
             suffix = [dbname substringWithRange:NSMakeRange(remaining.location, len - remaining.location)];
-            dbfilename = [dbname substringWithRange:NSMakeRange(5, remaining.location - 5)];
+            dbname = [dbname substringWithRange:NSMakeRange(5, remaining.location - 5)];
           }
 
-          NSString *dbpath = [self getDBPath:dbfilename at:dblocation];
+          NSString *dbpath = [self getDBPath:dbname at:dblocation];
 
           if (suffix) {
             dbname = [NSString stringWithFormat: @"file:%@%@", dbpath, suffix];
