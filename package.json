@@ -1,6 +1,6 @@
 {
   "name": "react-native-octodb",
-  "version": "5.0.5",
+  "version": "5.0.7",
   "description": "OctoDB bindings for React Native (Android & iOS)",
   "main": "sqlite.js",
   "scripts": {

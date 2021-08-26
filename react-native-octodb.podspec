@@ -17,5 +17,10 @@ Pod::Spec.new do |s|
   s.preserve_paths = 'README.md', 'LICENSE', 'package.json', 'sqlite.js'
   s.source_files   = "platforms/ios/*.{h,m}"
 
+  s.libraries = 'octodb', 'binn', 'uv', 'secp256k1-vrf'
+  s.xcconfig = {
+    'LIBRARY_SEARCH_PATHS' => "$(inherited) $(SRCROOT)/../node_modules/react-native-octodb/platforms/ios/lib"
+  }
+
   s.dependency 'React'
 end
