@@ -20,7 +20,7 @@ import {
   ListView
 } from 'react-native';
 
-import SQLite from 'react-native-octodb';
+import SQLite from 'react-native-litesync';
 
 SQLite.DEBUG(true);
 SQLite.enablePromise(false);

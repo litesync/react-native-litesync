@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import ListView from 'deprecated-react-native-listview';
 
-import SQLite from 'react-native-octodb';
+import SQLite from 'react-native-litesync';
 
 SQLite.DEBUG(true);
 SQLite.enablePromise(false);
