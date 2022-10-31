@@ -194,66 +194,11 @@ db.executeSql("pragma sync_status", [], (result) => {
 
 ## User Sign Up & User Login 
 
-When the user is accessing your app for the first time (in any device), it will be required to sign up
+LiteSync replicates the same database to all the users.
 
-The app can capture user data and send it to the backend user authorization service using this command:
+You need to implement the authorization by yourself, if required.
 
-```
-pragma user_signup='<user_data>'
-```
-
-If the user is already signed up on your backend and is now using a new device, it should use the login option:
-
-```
-pragma user_login='<user_data>'
-```
-
-You can use any user data you want (phone number, username, OAuth...). The data can be encoded in a text (JSON, YAML...)
-or a binary format. If using a text format, each single quote must be doubled (replace `'` with `''`).
-If using a binary format then it must be encoded in base64 or hex because the command only accepts strings.
-
-Here is an example code using JSON:
-
-```js
-const user_signup = async () => {
-  var passwd = await sha256(email + password)
-  var info = JSON.stringify({email: email, passwd: passwd})
-  var sql = "pragma user_signup='" + info.replace(/'/g, "''") + "'"
-  db.executeSql(sql, [], (result) => {
-    console.log('log in command sent' + JSON.parse(result))
-  }, (msg) => {
-    setWaiting(false)
-    console.log('could not log in the user:', msg)
-  });  
-}
-```
-
-Notice that you must implement the [backend service](https://github.com/litesync/docs/blob/master/auth-service.md)
-that handles these authorization requests.
-
-
-## Multi-User App
-
-To support multiple users in a single app installation your app can have a database for each user.
-
-Your app will need to keep track of which database is used for each user.
-An easy way is to convert the username or e-mail into hex format and then use it as the database name:
-
-```js
-var dbname = hex(email) + ".db"
-var uri = "file:" + dbname + "?node=secondary&connect=tcp://111.222.33.44:1234"
-```
-
-### Sign Out
-
-Just close the currently open database and display the signup & login screen
-
-### Login
-
-When the user enters its data (usually e-mail and password):
-
-1. Get the database name based on the e-mail and open it
-2. Wait for the db event. If not ready, then send signup/login info via the `pragma` command. If ready, then check if the password is correct
+For an easier approach that supports user login, check [OctoDB](https://github.com/octodb/react-native-octodb)
 
 
 ## Importing a pre-populated database
