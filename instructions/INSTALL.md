@@ -1,10 +1,10 @@
 # Installation
 
 ```
-npm install --save react-native-octodb
+npm install --save react-native-litesync
 ```
 
-Then follow the instructions for your platform to link `react-native-octodb` into your project
+Then follow the instructions for your platform to link `react-native-litesync` into your project
 
 
 ## iOS
@@ -28,7 +28,7 @@ cd ios && pod install && cd ..
 Add this to your Podfile which should be located inside the ios project subdirectory
 ```ruby
 pod 'React', :path => '../node_modules/react-native'
-pod 'react-native-octodb', :path => '../node_modules/react-native-octodb'
+pod 'react-native-litesync', :path => '../node_modules/react-native-litesync'
 ```
 Or use the sample Podfile included in the package by copying it over to ios subdirectory and replacing AwesomeProject inside of it with the name of your RN project.
 
@@ -74,7 +74,7 @@ Add libSQLite.a (from Workspace location) to the required Libraries and Framewor
 
 #### Step 2. Application JavaScript require
 
-Add `var SQLite = require('react-native-octodb')` to your `App.js`
+Add `var SQLite = require('react-native-litesync')` to your `App.js`
 
 
 #### Step 3. Write application JavaScript code using the SQLite plugin
@@ -139,9 +139,9 @@ Located under Gradle Settings in Project Panel
 File: android/settings.gradle
 
 ```gradle
-include ':react-native-octodb'
-project(':react-native-octodb').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-octodb/platforms/android') // react-native-octodb >= 4.0.0
-// IMPORTANT: if you are working with a version less than 4.0.0 the project directory is '../node_modules/react-native-octodb/src/android'
+include ':react-native-litesync'
+project(':react-native-litesync').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-litesync/platforms/android') // react-native-litesync >= 4.0.0
+// IMPORTANT: if you are working with a version less than 4.0.0 the project directory is '../node_modules/react-native-litesync/src/android'
 ```
 
 #### Step 2 - Update app module Gradle build script
@@ -153,7 +153,7 @@ File: android/app/build.gradle
 ```gradle
 dependencies {
     ...
-    implementation project(':react-native-octodb')
+    implementation project(':react-native-litesync')
 }
 ```
 
@@ -221,7 +221,7 @@ File: index.android.js
 
 ```js
 var React = require('react-native');
-var SQLite = require('react-native-octodb')
+var SQLite = require('react-native-litesync')
 ```
 
 See full examples (callbacks and Promises) in the `test` directory

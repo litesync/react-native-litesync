@@ -1,16 +1,16 @@
-<p align="center"><img width="50%" src="https://github.com/octodb/docs/blob/master/images/octodb-logo.jpg" alt="OctoDB logo"></p>
+<p align="center"><img width="50%" src="https://github.com/litesync/docs/blob/master/images/litesync-logo.jpg" alt="LiteSync logo"></p>
 
-<h1 align="center">React Native OctoDB</h1>
+<h1 align="center">React Native LiteSync</h1>
 
-OctoDB plugin for React Native (Android and iOS)
+LiteSync plugin for React Native (Android and iOS)
 
-This plugin works as a wrapper over the OctoDB native library. It can be used with both the free and the full versions
+This plugin works as a wrapper over the LiteSync native library. It can be used with both the free and the full versions
 
 This is a fork of [react-native-sqlite-storage](https://github.com/andpor/react-native-sqlite-storage)
 
 Main differences:
 
-* Links to the OctoDB native library
+* Links to the LiteSync native library
 * Query parameters are not converted to strings
 
 Features:
@@ -18,17 +18,17 @@ Features:
 * iOS and Android supported via identical JavaScript API
 * SQL transactions
 * JavaScript interface via callbacks or Promises
-* Pre-populated SQLite database import from application bundle and sandbox (for dbs that do not use OctoDB)
+* Pre-populated SQLite database import from application bundle and sandbox (for dbs that do not use LiteSync)
 
 
 # Installation
 
 ```
 # using yarn
-yarn add react-native-octodb react-native-udp
+yarn add react-native-litesync react-native-udp
 
 # using npm
-npm install react-native-octodb react-native-udp
+npm install react-native-litesync react-native-udp
 ```
 
 Then run:
@@ -42,14 +42,14 @@ For React Native 0.59 and below (manual linking) please follow these [instructio
 
 ## Native Libraries
 
-To install the free version of OctoDB native libraries, execute the following:
+To install the free version of LiteSync native libraries, execute the following:
 
 ```
-wget http://octodb.io/download/octodb.aar
-wget http://octodb.io/download/octodb-free-ios-native-libs.tar.gz
-tar zxvf octodb-free-ios-native-libs.tar.gz lib
-mv lib node_modules/react-native-octodb/platforms/ios/
-mv octodb.aar node_modules/react-native-octodb/platforms/android/
+wget http://litesync.io/download/litesync.aar
+wget http://litesync.io/download/litesync-free-ios-native-libs.tar.gz
+tar zxvf litesync-free-ios-native-libs.tar.gz lib
+mv lib node_modules/react-native-litesync/platforms/ios/
+mv litesync.aar node_modules/react-native-litesync/platforms/android/
 ```
 
 When moving to the full version just copy the libraries to the respective folders as done above,
@@ -61,7 +61,7 @@ replacing the existing files.
 Here is an example code:
 
 ```javascript
-var SQLite = require('react-native-octodb')
+var SQLite = require('react-native-litesync')
 
 on_error = (err) => {
   console.log("Error:", err);
@@ -101,7 +101,7 @@ insert_items = () => {
     // CREATE TABLE IF NOT EXISTS tasks (id INTEGER PRIMARY KEY, name, done, row_owner)
     tx.executeSql("INSERT INTO tasks (name,done) VALUES ('Learn React Native',1)", []);
     tx.executeSql("INSERT INTO tasks (name,done) VALUES ('Use SQLite',1)", []);
-    tx.executeSql("INSERT INTO tasks (name,done) VALUES ('Test OctoDB',0)", []);
+    tx.executeSql("INSERT INTO tasks (name,done) VALUES ('Test LiteSync',0)", []);
   }, () => {
     // success callback = transaction committed
     show_items();
@@ -184,7 +184,7 @@ db.executeSql("pragma sync_status", [], (result) => {
     var status = result.rows.item(0);
     console.log('sync status:', status.sync_status);
   } else {
-    console.log('OctoDB is not active')
+    console.log('LiteSync is not active')
   }
 }, (msg) => {
   console.log('could not run "pragma sync_status":', msg)
@@ -228,7 +228,7 @@ const user_signup = async () => {
 }
 ```
 
-Notice that you must implement the [backend service](https://github.com/octodb/docs/blob/master/auth-service.md)
+Notice that you must implement the [backend service](https://github.com/litesync/docs/blob/master/auth-service.md)
 that handles these authorization requests.
 
 
@@ -258,7 +258,7 @@ When the user enters its data (usually e-mail and password):
 
 ## Importing a pre-populated database
 
-This is **NOT** supported if the database uses OctoDB, because the database will be downloaded from the primary node(s) at the first run.
+This is **NOT** supported if the database uses LiteSync, because the database will be downloaded from the primary node(s) at the first run.
 
 But as this library also supports normal SQLite databases, you can import an existing pre-populated database file into your application when opening a normal SQLite database.
 

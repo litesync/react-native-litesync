@@ -1,22 +1,22 @@
 {
-  "name": "react-native-octodb",
+  "name": "react-native-litesync",
   "version": "5.0.7",
-  "description": "OctoDB bindings for React Native (Android & iOS)",
+  "description": "LiteSync bindings for React Native (Android & iOS)",
   "main": "sqlite.js",
   "scripts": {
     "test": "echo \"Error: no test specified yet\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/octodb/react-native-octodb.git"
+    "url": "https://github.com/litesync/react-native-litesync.git"
   },
   "keywords": [
-    "react-native-octodb",
+    "react-native-litesync",
     "react-native-sqlite-storage",
     "react-native-sqlite",
     "reactnative",
     "react-native",
-    "octodb",
+    "litesync",
     "sqlite",
     "sqlite3",
     "ios",
@@ -25,9 +25,9 @@
   "author": "Andrzej Porebski",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/octodb/react-native-octodb/issues"
+    "url": "https://github.com/litesync/react-native-litesync/issues"
   },
-  "homepage": "https://github.com/octodb/react-native-octodb",
+  "homepage": "https://github.com/litesync/react-native-litesync",
   "peerDependencies": {
     "react-native": ">=0.14.0",
     "react-native-udp": "^4.1.2"

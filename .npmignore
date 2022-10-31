@@ -84,8 +84,7 @@ gradle-app.setting
 instructions/
 
 # Native Libraries
-platforms/android/octodb/octodb.aar
+platforms/android/litesync/litesync.aar
+platforms/ios/lib/liblitesync.a
 platforms/ios/lib/libbinn.a
-platforms/ios/lib/liboctodb.a
-platforms/ios/lib/libsecp256k1-vrf.a
 platforms/ios/lib/libuv.a

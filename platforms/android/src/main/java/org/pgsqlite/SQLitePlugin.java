@@ -76,7 +76,7 @@ public class SQLitePlugin extends ReactContextBaseJavaModule {
         super(reactContext);
         this.context = reactContext.getApplicationContext();
         this.threadPool = Executors.newCachedThreadPool();
-        System.loadLibrary("octodb");
+        System.loadLibrary("litesync");
     }
 
     /**
